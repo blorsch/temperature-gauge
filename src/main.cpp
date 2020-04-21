@@ -32,7 +32,7 @@ Servo servo;
 
 void setup() {
   Serial.begin(9600);
-  // Initialize device.
+  // Initialize device. Lines 35-52 from Elegoo DHT-11 example
   dht.begin();
   Serial.println(F("DHTxx Unified Sensor Example"));
   // Print temperature sensor details.
@@ -47,19 +47,9 @@ void setup() {
   Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
   Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
   Serial.println(F("------------------------------------"));
-  // Print humidity sensor details.
-  dht.humidity().getSensor(&sensor);
-  Serial.println(F("Humidity Sensor"));
-  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
-  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
-  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
-  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("%"));
-  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("%"));
-  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("%"));
-  Serial.println(F("------------------------------------"));
+
   // Set delay between sensor readings based on sensor details.
   delayMS = sensor.min_delay / 1000;
-  //lcd.print("Hello, World!");
 
   //setup servo
   servo.attach(3);
@@ -69,8 +59,8 @@ void setup() {
 void loop() {
   // Delay between measurements.
   delay(delayMS);
-  // Get temperature event and print its value.
-  sensors_event_t event;
+
+  sensors_event_t event; //lines 61-68 from the Elegoo DHT-11 example
   dht.temperature().getEvent(&event);
   if (isnan(event.temperature)) {
     Serial.println(F("Error reading temperature!"));
@@ -79,12 +69,11 @@ void loop() {
 
     //display on servo - 32-100°
     float tempF = (event.temperature * 1.8) + 32;
-    Serial.print(F("Temperature: "));
+    //float tempF = 65; //90 degrees, for aligning needle
     Serial.print(tempF);
-    Serial.println(F("°F"));
 
-    //0 is pointing to the left, 90 down, 180 to left
-    int degrees = map(tempF, 32, 100, 0, 180);
+    //0 is pointing to the left, 90 up, 180 to right
+    int degrees = map(tempF, 30, 100, 180, 0);
 
     servo.write(degrees);
 
