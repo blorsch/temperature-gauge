@@ -12,6 +12,7 @@
 #include <DHT_U.h>
 #include <Servo.h>
 
+//Lines 15-30 from Elegoo DHT-11 Example
 #define DHTPIN 2     // Digital pin connected to the DHT sensor
 // Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
 // Pin 15 can work but DHT must be disconnected during program upload.
